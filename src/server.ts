@@ -1,6 +1,7 @@
 import express from 'express'
 import { router } from './router'
 import morgan from 'morgan'
+import { protect } from './modules/auth'
 
 export const app = express()
 
@@ -14,4 +15,4 @@ app.get('/', (req, res) => {
     res.json({ message: 'Hello!!!' })
 })
 
-app.use('/api', router)
+app.use('/api', protect, router)
