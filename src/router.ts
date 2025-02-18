@@ -15,7 +15,10 @@ router.get('/product', (req, res) => {
     res.json({ msg: 'Hello from product' })
 })
 router.get('/product/:id', () => { })
-router.put('/product/:id', body('name').exists().isString(), handlerInputsErrors, (req: Request, res: Response) => {
+router.put('/product/:id', 
+    body('name').exists().isString(), 
+    handlerInputsErrors, 
+    (req: Request, res: Response) => {
 
     res.json({ msg: "Ok" })
 
