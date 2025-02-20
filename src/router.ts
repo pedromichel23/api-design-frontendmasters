@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { body, oneOf, validationResult } from 'express-validator'
 import { handlerInputsErrors } from "./modules/middlewares";
 import { createProduct, deleteProduct, getOneProduct, getProducts, updateProduct } from "./handlers/product";
+import { createUpdate, deleteUpdate, getOneUpdate, getUpdates, updateUpdate } from "./handlers/update";
 
 export const router = Router()
 
@@ -28,8 +29,8 @@ router.delete('/product/:id', deleteProduct)
 
 
 // Update
-router.get('/update', () => { })
-router.get('/update/:id', () => { })
+router.get('/update', getUpdates)
+router.get('/update/:id', getOneUpdate)
 router.put('/update/:id',
     body('title').optional(),
     body('body').optional(),
@@ -39,9 +40,13 @@ router.put('/update/:id',
         UPDATE_STATUS.SHIPPED]
         ),
     body('version').optional(),
-    () => { })
-router.post('/update', () => { })
-router.delete('/update/:id', () => { })
+    updateUpdate)
+router.post('/update',
+    body('title').exists().isString(),
+    body('body').exists().isString(),
+    body('productId').exists().isString(),
+    createUpdate)
+router.delete('/update/:id', deleteUpdate)
 
 
 // Update Point
