@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { body, oneOf, validationResult } from 'express-validator'
 import { handlerInputsErrors } from "./modules/middlewares";
+import { createProduct, deleteProduct, getOneProduct, getProducts, updateProduct } from "./handlers/product";
 
 export const router = Router()
 
@@ -11,20 +12,18 @@ enum UPDATE_STATUS {
 }
 
 // Product
-router.get('/product', (req, res) => {
-    res.json({ msg: 'Hello from product' })
-})
-router.get('/product/:id', () => { })
-router.put('/product/:id', 
-    body('name').exists().isString(), 
-    handlerInputsErrors, 
-    (req: Request, res: Response) => {
-
-    res.json({ msg: "Ok" })
-
-})
-router.post('/product', () => { })
-router.delete('/product/:id', () => { })
+router.get('/product', getProducts)
+router.get('/product/:id', getOneProduct)
+router.put('/product/:id',
+    body('name').exists().isString(),
+    handlerInputsErrors,
+    updateProduct
+)
+router.post('/product',
+    body('name').isString(),
+    handlerInputsErrors,
+    createProduct)
+router.delete('/product/:id', deleteProduct)
 
 
 
