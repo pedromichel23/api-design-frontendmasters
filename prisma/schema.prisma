@@ -5,12 +5,13 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 // un usuario puede tener muchos productos pero un producto solo puede pertencer a un usuario
@@ -25,7 +26,7 @@ model User {
 model Product {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
-  name        String   @db.VarChar(255)
+  name        String
   belongsToId String
   belongsTo   User     @relation(fields: [belongsToId], references: [id])
   updates     Update[]
@@ -57,7 +58,7 @@ model UpdatePoint {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime
-  name        String   @db.VarChar(255)
+  name        String
   description String
 
   updatedId String

@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import { body, oneOf, validationResult } from 'express-validator'
 import { handlerInputsErrors } from "./modules/middlewares";
 import { createProduct, deleteProduct, getOneProduct, getProducts, updateProduct } from "./handlers/product";
@@ -55,3 +55,13 @@ router.get('/updatepoint/:id', () => { })
 router.put('/updatepoint/:id', () => { })
 router.post('/updatepoint', () => { })
 router.delete('/updatepoint/:id', () => { })
+
+router.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err.type === 'auth') {
+        res.status(401).json({ message: 'unauthorized' })
+    } else if (err.type === 'input') {
+        res.status(400).json({ message: 'invalid input' })
+    } else {
+        res.status(500).json({ message: `Error 2: ${err.message}` })
+    }
+})

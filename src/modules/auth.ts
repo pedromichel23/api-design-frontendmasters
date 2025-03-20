@@ -42,7 +42,7 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
         res.status(401).json({ msg: 'Not valid token' })
     }
 
-    console.log('token: ', token)
+    // console.log('token: ', token)
 
     try {
         const user = jwt.verify(token, JWT_SECRET)

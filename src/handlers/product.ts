@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { prisma } from '../db'
 
 // Obtener todos los productos de un usuario especifico
@@ -29,33 +29,21 @@ export const getOneProduct = async (req: Request, res: Response) => {
 }
 
 // Crear un producto
-export const createProduct = async (req: Request, res: Response) => {
-    const product = await prisma.product.create({
-        data: {
-            name: req.body.name,
-            belongsToId: req.user.id
-        }
-    })
+export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const product = await prisma.product.create({
+            data: {
+                name: req.body.name,
+                belongsToId: req.user.id
+            }
+        })
 
-    res.json({ data: product })
+        res.json({ data: product })
+    } catch (err: any) {
+        next(err)
+    }
 }
 
-// Actualizar un producto
-// export const updateProduct = async (req: Request, res: Response) => {
-//     const product = await prisma.product.update({
-//         where: {
-//             id_belongsToId: {
-//                 id: req.params.id,
-//                 belongsToId: req.user.id
-//             }
-//         },
-//         data: {
-//             name: req.body.name
-//         }
-//     })
-
-//     res.json({ data: product })
-// }
 export const updateProduct = async (req: Request, res: Response) => {
     const product = await prisma.product.update({
         where: {
@@ -69,20 +57,6 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     res.json({ data: product })
 }
-
-// Borrar un producto
-// export const deleteProduct = async (req: Request, res: Response) => {
-//     const product = await prisma.product.delete({
-//         where: {
-//             id_belongsToId: {
-//                 id: req.params.id,
-//                 belongsToId: req.user.id
-//             }
-//         }
-//     })
-
-//     res.json({ data: product })
-// }
 
 export const deleteProduct = async (req: Request, res: Response) => {
     const product = await prisma.product.delete({
